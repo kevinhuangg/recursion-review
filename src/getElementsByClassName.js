@@ -10,10 +10,17 @@ var getElementsByClassName = function(className) {
 
   var checkNode = function(node){
   //check if node has matching className
+  var classes = node.className.split(' ');
+  if (classes.indexOf(className) >= 0) {
     //if match, push node into result
+    result.push(node);
+  }
 
   //iterate over child nodes
+  for (var i=0; i<node.children.length; i++){
     //call checkNode on each node
+    checkNode(node.children[i]);
+  }
 
   };
 
