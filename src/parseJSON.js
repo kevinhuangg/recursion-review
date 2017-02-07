@@ -6,11 +6,13 @@
 //input: JSON string
 //output: Javascript object or value
 var parseJSON = function(json) {
-  var char = json[0];
+  var counter = 0;
+  var char = json[counter];
   
   //next function: grabs the next character from the string as you parse through it
   var next = function next() {
-    char = json[json.indexOf(char) + 1];
+    counter++;
+    char = json[counter];
   };
 
   var string = function string() {
@@ -22,6 +24,15 @@ var parseJSON = function(json) {
     }
 
     return result;
+  };
+  var number = function number() {
+    var result = '';
+    while (/\d|\.|-/.test(char)) {
+      result += char;
+      next();
+    }
+
+    return parseFloat(result);
   };
 
   var boolean = function boolean() {
@@ -49,6 +60,14 @@ var parseJSON = function(json) {
 
     throw new SyntaxError;
   };
+
+  var array = function array() {
+    var result = [];
+    if (char === ']') {
+      return result;
+    }
+
+  };
   //if char is '"'
   if (char === '"') {
     //call string function
@@ -58,5 +77,11 @@ var parseJSON = function(json) {
   if (char === 't' || char === 'f') {
     //call boolean function
     return boolean();
+  }
+  if (/\d|\.|-/.test(char)) {
+    return number();
+  }
+  if (char === '[') {
+    return array();
   }
 };
